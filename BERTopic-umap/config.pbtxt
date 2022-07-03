@@ -1,0 +1,26 @@
+name: "BERTopic-umap"
+backend: "python"
+max_batch_size: 65536
+
+input [
+  {
+	name: "IN"
+	data_type: TYPE_FP32
+	dims: [ -1 ]
+  }
+]
+output [
+  {
+	name: "REDUCED"
+	data_type: TYPE_FP32
+	dims: [ -1 ]
+  }
+]
+
+parameters: {
+  key: "EXECUTION_ENV_PATH",
+  value: {string_value: "/models/rapids-triton.tar.gz"}
+}
+
+instance_group [{ kind: KIND_GPU, count: 2 }]
+dynamic_batching { max_queue_delay_microseconds: 5000 }
