@@ -47,3 +47,11 @@ curl -X POST  http://localhost:8000/v2/models/BERTopic-umap/versions/1/infer --d
 ```
 
 If you open the test_query files you'll find ascii character rather than what the model truly expects: FP32 binary bytes. Yes, you need to run your BERT embeddings separately and send them to the model in binary form, **it doesn't take ASCII input!**
+
+## Results
+
+With my complex model (`n_components` = 12, 12k topics) I could almost saturate two 3090 GPUs and needed help from 3-4 external 5950x CPUs to keep up with them. You should have much better luck if you keep your model from becoming too complex.
+
+<img width="862" alt="176162276-800beddc-0a1c-4379-a926-6e8af737611d" src="https://user-images.githubusercontent.com/482331/177035375-78b29148-469f-4ca5-a247-0db92194741a.png">
+
+There is a bug or a timeout somewhere that's making Triton dropping maybe 1% of the requests, and that's why the graph above isn't a straight line, but I don't think it's my code.
